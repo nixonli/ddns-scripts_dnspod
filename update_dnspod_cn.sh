@@ -23,19 +23,23 @@ __DOMAIN="${domain#*@}"
  
 #添加解析记录
 add_domain() {
-if curl -s -d "login_token=$username,$password&format=json&domain=$__DOMAIN&sub_domain=$__HOST&record_type=$__TYPE&record_line_id=0&value=${__IP}&ttl=120" "https://dnsapi.cn/Record.Create" | grep  -q '"code":"1"';then
+DATFILE=`curl -s -d "login_token=$username,$password&format=json&domain=$__DOMAIN&sub_domain=$__HOST&record_type=$__TYPE&record_line_id=0&value=${__IP}&ttl=120" "https://dnsapi.cn/Record.Create"`
+value=`jsonfilter -s "$DATFILE" -e "@.status.code"`
+if [ $value == 1 ];then
 	write_log 7 "添加新解析记录IP:[$__HOST],[$__TYPE],[${__IP}]成功!"
 else
-	write_log 14 "添加解析记录IP:[$__HOST],[$__TYPE],[${__IP}]失败!"
+	write_log 14 "添加解析记录IP:[$__HOST],[$__TYPE],[${__IP}]失败! 返回code:$value"
 fi
 }
  
 #修改解析记录
 update_domain() {
-if curl -s -d "login_token=$username,$password&format=json&domain=$__DOMAIN&record_id=$__RECID&value=${__IP}&record_type=$__TYPE&record_line_id=0&sub_domain=$__HOST&ttl=120" "https://dnsapi.cn/Record.Modify" | grep  -q '"code":"1"';then
+DATFILE=`curl -s -d "login_token=$username,$password&format=json&domain=$__DOMAIN&record_id=$__RECID&value=${__IP}&record_type=$__TYPE&record_line_id=0&sub_domain=$__HOST&ttl=120" "https://dnsapi.cn/Record.Modify"`
+value=`jsonfilter -s "$DATFILE" -e "@.status.code"`
+if [ $value == 1 ];then
 	write_log 7 "修改解析记录host:[$__HOST],type:[$__TYPE],ip:[${__IP}]成功!"
 else
-	write_log 14 "修改解析记录host:[$__HOST],type:[$__TYPE],ip:[${__IP}]失败!"
+	write_log 14 "修改解析记录host:[$__HOST],type:[$__TYPE],ip:[${__IP}]失败! 返回code:$value"
 fi
 }
  
