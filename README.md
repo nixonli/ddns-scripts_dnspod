@@ -2,7 +2,7 @@
 
 编译说明
 
-下载源码:git clone https://git.nixonli.com/nixon/ddns-scripts_dnspod.git
+下载源码:git https://github.com/nixonli/ddns-scripts_dnspod.git
 
 编译
 
