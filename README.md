@@ -9,3 +9,6 @@
 编译
 
 make package/ddns-scripts_dnspod/compile V=99
+
+本人网站地址：https://www.nixonli.com
+手动配置教程：https://www.nixonli.com/23133.html
